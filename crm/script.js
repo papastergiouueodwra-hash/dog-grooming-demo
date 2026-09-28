@@ -24,7 +24,7 @@ function render(){
   const active=document.querySelector('.filter.active')?.dataset.filter||'all';
   const query=searchEl.value.trim().toLowerCase();
   const all=appointments;
-  const list=all.filter(a=>(active==='all'||a.status===active)&&(!query||a.dogName.toLowerCase().includes(query)||(a.phone||'').includes(query)||(a.email||'').toLowerCase().includes(query)));
+  const list=all.filter(a=>(active==='all'||a.status===active)&&(!query||a.dogName.toLowerCase().includes(query)||(a.ownerName||'').toLowerCase().includes(query)||(a.breed||'').toLowerCase().includes(query)||(a.phone||'').includes(query)||(a.email||'').toLowerCase().includes(query)));
   const todayKey=new Date().toISOString().slice(0,10);
   document.getElementById('todayCount').textContent=all.filter(a=>a.date===todayKey&&a.status!=='cancelled').length;
   document.getElementById('scheduledCount').textContent=all.filter(a=>a.status==='scheduled').length;
@@ -35,7 +35,8 @@ function render(){
   list.sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time)).forEach(a=>{
     const el=document.createElement('article');el.className='appointment';
     el.innerHTML=`
-      <div class="appt-main"><div class="paw">🐾</div><div><strong>${escapeHtml(a.dogName)}</strong><small>${escapeHtml(a.service)}</small></div></div>
+      <div class="appt-main"><div class="paw">🐾</div><div><strong>${escapeHtml(a.dogName)}</strong><small>${escapeHtml(a.breed||'—')} • ${escapeHtml(a.service)}</small></div></div>
+      <div><div class="field-label">ΙΔΙΟΚΤΗΤΗΣ</div><div class="field-value">${escapeHtml(a.ownerName||'—')}</div><div class="field-label" style="margin-top:10px">ΡΑΤΣΑ</div><div class="field-value">${escapeHtml(a.breed||'—')}</div></div>
       <div><div class="field-label">ΗΜΕΡΟΜΗΝΙΑ</div><div class="field-value">${formatDate(a.date)}</div></div>
       <div><div class="field-label">ΩΡΑ</div><div class="field-value">${escapeHtml(a.time)}</div></div>
       <div><div class="field-label">ΕΠΙΚΟΙΝΩΝΙΑ</div><div class="field-value">${escapeHtml(a.phone||'—')}<br>${escapeHtml(a.email||'—')}</div></div>
