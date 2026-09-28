@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Maison Paws — Appointments CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <a class="brand" href="../"><span>MAISON</span><b>PAWS</b></a>
+    <div class="topbar-label">APPOINTMENTS CRM</div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <p class="eyebrow">MAISON PAWS • MANAGEMENT</p>
+        <h1>Τα <em>ραντεβού</em> σου.</h1>
+        <p class="lead">Όλα τα bookings συγκεντρωμένα σε ένα απλό, καθαρό dashboard.</p>
+      </div>
+      <div class="date-pill" id="todayLabel"></div>
+    </section>
+
+    <section class="stats">
+      <article><span>ΣΗΜΕΡΑ</span><strong id="todayCount">0</strong></article>
+      <article><span>ΠΡΟΓΡΑΜΜΑΤΙΣΜΕΝΑ</span><strong id="scheduledCount">0</strong></article>
+      <article><span>ΟΛΟΚΛΗΡΩΘΗΚΑΝ</span><strong id="completedCount">0</strong></article>
+      <article><span>ΑΚΥΡΩΜΕΝΑ</span><strong id="cancelledCount">0</strong></article>
+    </section>
+
+    <section class="toolbar">
+      <div class="filters">
+        <button class="filter active" data-filter="all">Όλα</button>
+        <button class="filter" data-filter="scheduled">Προγραμματισμένα</button>
+        <button class="filter" data-filter="completed">Ολοκληρωμένα</button>
+        <button class="filter" data-filter="cancelled">Ακυρωμένα</button>
+      </div>
+      <input id="search" type="search" placeholder="Αναζήτηση σκύλου…">
+    </section>
+
+    <section id="appointments" class="appointments"></section>
+    <div id="empty" class="empty" hidden>
+      <div>🐾</div>
+      <h2>Δεν υπάρχουν ραντεβού</h2>
+      <p>Τα νέα bookings από τη φόρμα του Maison Paws θα εμφανίζονται εδώ.</p>
+    </div>
+  </main>
+
+  <footer>MAISON PAWS <span>•</span> APPOINTMENTS CRM</footer>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
