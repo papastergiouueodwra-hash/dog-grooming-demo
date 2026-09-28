@@ -7,6 +7,8 @@ const mapAppointment = row => ({
   dogName: row.dog_name,
   phone: row.phone || '',
   email: row.email || '',
+  ownerName: row.owner_name || '',
+  breed: row.breed || '',
   service: row.service,
   date: row.appointment_date,
   time: String(row.appointment_time).slice(0, 5),
@@ -20,9 +22,11 @@ module.exports = async (req, res) => {
       return res.status(500).json({ error: 'DATABASE_URL is not configured.' });
     }
 
+    await sql`ALTER TABLE appointments ADD COLUMN IF NOT EXISTS owner_name TEXT, ADD COLUMN IF NOT EXISTS breed TEXT`;
+
     if (req.method === 'GET') {
       const rows = await sql`
-        SELECT id, dog_name, phone, email, service,
+        SELECT id, dog_name, owner_name, breed, phone, email, service,
                TO_CHAR(appointment_date, 'YYYY-MM-DD') AS appointment_date,
                TO_CHAR(appointment_time, 'HH24:MI') AS appointment_time,
                status, created_at
@@ -33,18 +37,18 @@ module.exports = async (req, res) => {
     }
 
     if (req.method === 'POST') {
-      const { dogName, phone, email, service, date, time } = req.body || {};
+      const { dogName, ownerName, breed, phone, email, service, date, time } = req.body || {};
 
-      if (!dogName || !service || !date || !time) {
-        return res.status(400).json({ error: 'dogName, service, date and time are required.' });
+      if (!dogName || !ownerName || !breed || !service || !date || !time) {
+        return res.status(400).json({ error: 'dogName, ownerName, breed, service, date and time are required.' });
       }
 
       const rows = await sql`
         INSERT INTO appointments
-          (dog_name, phone, email, service, appointment_date, appointment_time, status)
+          (dog_name, owner_name, breed, phone, email, service, appointment_date, appointment_time, status)
         VALUES
-          (${dogName}, ${phone || null}, ${email || null}, ${service}, ${date}, ${time}, 'scheduled')
-        RETURNING id, dog_name, phone, email, service,
+          (${dogName}, ${ownerName}, ${breed}, ${phone || null}, ${email || null}, ${service}, ${date}, ${time}, 'scheduled')
+        RETURNING id, dog_name, owner_name, breed, phone, email, service,
                   TO_CHAR(appointment_date, 'YYYY-MM-DD') AS appointment_date,
                   TO_CHAR(appointment_time, 'HH24:MI') AS appointment_time,
                   status, created_at
@@ -65,7 +69,7 @@ module.exports = async (req, res) => {
         UPDATE appointments
         SET status = ${status}
         WHERE id = ${id}
-        RETURNING id, dog_name, phone, email, service,
+        RETURNING id, dog_name, owner_name, breed, phone, email, service,
                   TO_CHAR(appointment_date, 'YYYY-MM-DD') AS appointment_date,
                   TO_CHAR(appointment_time, 'HH24:MI') AS appointment_time,
                   status, created_at
